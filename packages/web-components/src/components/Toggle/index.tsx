@@ -25,7 +25,7 @@ export const Toggle = (props: Props) => {
       type="checkbox"
       checked={value}
       aria-label={label}
-      onToggle={handleChange}
+      onClick={handleChange}
       data-size={size}
     />
   );

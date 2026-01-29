@@ -6,6 +6,7 @@ import type { FunctionComponent } from "preact";
 import { useState } from "preact/hooks";
 import { TrAttachmentInfo } from "@/components/TestResult/TrSteps/TrAttachmentInfo";
 import * as styles from "@/components/TestResult/TrSteps/styles.scss";
+import { useI18n } from "@/stores";
 import { openModal } from "@/stores/modal";
 
 const { lineImagesImage, lineFilesFileAttachment2, playwrightLogo } = allureIcons;
@@ -56,14 +57,15 @@ export const TrAttachment: FunctionComponent<{
   className?: string;
 }> = ({ item, stepIndex }) => {
   const [isOpened, setIsOpen] = useState(false);
+  const { t: tAttachments } = useI18n("attachments");
   const { link } = item;
   const { missed } = link;
   const componentType = attachmentType(link.contentType);
-  const isValidComponentType = !["archive", null].includes(componentType.type as string);
+  const isValidComponentType = !["archive", null].includes(componentType);
 
   const expandAttachment = (event: Event) => {
     event.stopPropagation();
-    if (componentType.type !== "image") {
+    if (componentType !== "image") {
       return;
     }
     openModal({
@@ -109,7 +111,7 @@ export const TrAttachment: FunctionComponent<{
       {isOpened && isValidComponentType && (
         <div className={styles["test-result-attachment-content-wrapper"]}>
           <div className={styles["test-result-attachment-content"]} role={"button"} onClick={expandAttachment}>
-            <Attachment item={item} />
+            <Attachment item={item} i18n={{ imageDiff: (key: string) => tAttachments(`imageDiff.${key}`) }} />
           </div>
         </div>
       )}
